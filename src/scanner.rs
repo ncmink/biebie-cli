@@ -33,7 +33,7 @@ pub fn scan_folder(folder: &str) -> Vec<FileMeta> {
 
     let start_time = Instant::now();
 
-    // Create custom ThreadPool for optimal performance
+    // Parallel processing with Rayon
     let thread_count = determine_optimal_thread_count();
     let custom_pool = ThreadPoolBuilder::new()
         .num_threads(thread_count)
@@ -67,7 +67,7 @@ pub fn scan_folder(folder: &str) -> Vec<FileMeta> {
 
     let duplicate_tracker = Arc::new(DashMap::new());
 
-    // Process using custom ThreadPool with Rayon scope
+    // Process using custom ThreadPool with Rayon scope for Thread Contention
     let results = custom_pool.install(|| {
         process_nested_folders_with_scope(&dir_batches, &progress_bar, &duplicate_tracker)
     });
